@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebAssembly</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+
+  <script src="bundle.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Password Generator By Keyword</h1>
+    <div class="row">
+      <div class="col-md">
+        <div class="form-group">
+          <label for="serviceName">Service name:</label>
+          <input class="form-control" id="serviceName">
+
+          <label for="keyword">Keyword:</label>
+          <input class="form-control" id="keyword">
+
+          <label for="passwordLength">Length of password:</label>
+          <input type="number" class="form-control" id="passwordLength" min=8 max=60>
+
+          <label for="password">Password:</label>
+          <input class="form-control" id="password">
+
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" value="" id="useSpecialCharacters">Use special characters
+          </label>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-block" id="copy">Copy the password</button>
+      </div>
+      <div class="col-md">
+        <label for="minReq">Minimum Requirements:</label>
+        <ul class="list-group" id="minReq">
+          <li class="list-group-item">Minimum 8 characters in length</li>
+          <li class="list-group-item">Maximum 60 characters in length</li>
+          <li class="list-group-item">Uppercase Letters</li>
+          <li class="list-group-item">Lowercase Letters</li>
+          <li class="list-group-item">Numbers or Symbols</li>
+        </ul>
+        <p>
+          <a target="_blank" href="https://github.com/arkada38/rust-wasm-pgbk">Source code</a> /
+          <a target="_blank" href="http://www.passwordmeter.com/">Password Strength Checker</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
