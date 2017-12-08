@@ -20,7 +20,7 @@ window.onload = function () {
 
             let generate_password = () => {
                 if (passwordLength.value >= 8 && passwordLength.value <= 60) {
-                    let s = exports.generate_password(
+                    let s = exports.generate_password_c(
                         newString(exports, serviceName.value),
                         newString(exports, keyword.value),
                         passwordLength.value,

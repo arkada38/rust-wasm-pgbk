@@ -28,7 +28,7 @@ const M: usize = (38 * 4 + 3) * (62 * 4 + 3); // p % 4 = 3 // q % 4 = 3 // m = p
 static mut SEED: usize = 0;
 
 #[no_mangle]
-pub fn generate_password(
+pub fn generate_password_c(
     service_name_c: *mut c_char,
     keyword_c: *mut c_char,
     password_length: i32,
@@ -41,6 +41,15 @@ pub fn generate_password(
         keyword = CString::from_raw(keyword_c).into_string().unwrap();
     }
     
+    let res = generate_password(service_name, keyword, password_length, use_special_characters);
+    CString::new(res).unwrap().into_raw()
+}
+
+fn generate_password(
+    service_name: String,
+    keyword: String,
+    password_length: i32,
+    use_special_characters: bool) -> String {
     let service_name_score = get_score_of_utf8_bytes(&service_name);
     let keyword_score = get_score_of_utf8_bytes(&keyword);
 
@@ -183,7 +192,7 @@ pub fn generate_password(
     }
     
 
-    CString::new(password.to_string()).unwrap().into_raw()
+    password
 }
 
 fn get_score_of_utf8_bytes(s: &String) -> i32 {
