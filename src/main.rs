@@ -4,8 +4,6 @@ use std::mem;
 use std::ffi::CString;
 use std::os::raw::{c_char, c_void};
 
-fn main() {}
-
 #[no_mangle]
 pub extern "C" fn alloc(size: usize) -> *mut c_void {
     let mut buf = Vec::with_capacity(size);
@@ -117,14 +115,13 @@ pub fn generate_password(
     //Creation a password
     #[derive(PartialEq)]
     enum SymbolFrom {
-        Empty,
         Numbers,
         SpecialCharacters,
         UppercaseLetters,
         LowercaseLetters,
     }
     let mut password = String::new();
-    let mut last_symbol_for_password_from = SymbolFrom::Empty;
+    let mut last_symbol_for_password_from: Option<SymbolFrom> = None;
     let mut max_quantity: usize;
 
     for _ in 0..password_length {
@@ -136,19 +133,19 @@ pub fn generate_password(
         let mut new_symbol = String::new();
 
         //Select applicants
-        if password_of_numbers.chars().count() == max_quantity && last_symbol_for_password_from != SymbolFrom::Numbers && password.chars().count() > 0 {
+        if password_of_numbers.chars().count() == max_quantity && last_symbol_for_password_from != Some(SymbolFrom::Numbers) && password.chars().count() > 0 {
             new_symbol.push(password_of_numbers.chars().nth(0).unwrap());
         }
 
-        if password_of_special_characters.chars().count() == max_quantity && last_symbol_for_password_from != SymbolFrom::SpecialCharacters && password.chars().count() > 0 {
+        if password_of_special_characters.chars().count() == max_quantity && last_symbol_for_password_from != Some(SymbolFrom::SpecialCharacters) && password.chars().count() > 0 {
             new_symbol.push(password_of_special_characters.chars().nth(0).unwrap());
         }
 
-        if password_of_uppercase_letters.chars().count() == max_quantity && last_symbol_for_password_from != SymbolFrom::UppercaseLetters {
+        if password_of_uppercase_letters.chars().count() == max_quantity && last_symbol_for_password_from != Some(SymbolFrom::UppercaseLetters) {
             new_symbol.push(password_of_uppercase_letters.chars().nth(0).unwrap());
         }
 
-        if password_of_lowercase_letters.chars().count() == max_quantity && last_symbol_for_password_from != SymbolFrom::LowercaseLetters {
+        if password_of_lowercase_letters.chars().count() == max_quantity && last_symbol_for_password_from != Some(SymbolFrom::LowercaseLetters) {
             new_symbol.push(password_of_lowercase_letters.chars().nth(0).unwrap());
         }
 
@@ -163,22 +160,22 @@ pub fn generate_password(
         if password_of_numbers.contains(new_symbol)
         {
             password_of_numbers.retain(|c| c != new_symbol);
-            last_symbol_for_password_from = SymbolFrom::Numbers;
+            last_symbol_for_password_from = Some(SymbolFrom::Numbers);
         }
         else if password_of_special_characters.contains(new_symbol)
         {
             password_of_special_characters.retain(|c| c != new_symbol);
-            last_symbol_for_password_from = SymbolFrom::SpecialCharacters;
+            last_symbol_for_password_from = Some(SymbolFrom::SpecialCharacters);
         }
         else if password_of_uppercase_letters.contains(new_symbol)
         {
             password_of_uppercase_letters.retain(|c| c != new_symbol);
-            last_symbol_for_password_from = SymbolFrom::UppercaseLetters;
+            last_symbol_for_password_from = Some(SymbolFrom::UppercaseLetters);
         }
         else if password_of_lowercase_letters.contains(new_symbol)
         {
             password_of_lowercase_letters.retain(|c| c != new_symbol);
-            last_symbol_for_password_from = SymbolFrom::LowercaseLetters;
+            last_symbol_for_password_from = Some(SymbolFrom::LowercaseLetters);
         }
 
         //Add to the password
@@ -193,7 +190,6 @@ fn get_score_of_utf8_bytes(s: &String) -> i32 {
     let mut score = 0;
 
     for (i, c) in s.as_bytes().iter().enumerate() {
-        println!("{}", *c as i32);
         if i % 2 != 0 {
             score += 2 * *c as i32
         } else {
